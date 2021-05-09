@@ -57,8 +57,8 @@ jobs:
         with:
           files: output/sbolvisual.pdf
           
-      - name: Commit and push glyph PDFs
-        if: ${{ github.event_name == 'push' }}
+      - if: ${{ github.event_name == 'push' }}
+        name: Commit and push glyph PDFs
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
