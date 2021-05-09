@@ -23,8 +23,8 @@ jobs:
           npm install markdown-pdf
           sudo apt install git-restore-mtime
           
-      #- name: Reset file modification times
-      #  run: git restore-mtime
+      - name: Reset file modification times
+        run: git restore-mtime
 
       - name: Generate PDFs for glyphs
         run: python3 scripts/rebuild_glyphs.py
