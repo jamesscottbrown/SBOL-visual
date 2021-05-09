@@ -14,11 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install dependencies
         run: |
           npm install markdown-pdf
+          sudo apt install git-restore-mtime
+          
+      - name: Reset file modification times
+        run: git restore-mtime
 
       - name: Generate PDFs for glyphs
         run: python3 scripts/rebuild_glyphs.py
@@ -50,6 +56,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: output/sbolvisual.pdf
+          
+      - name: Commit and push glyph PDFs
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add specification/glyphscript/Glyphs/
+          git diff-index --quiet HEAD || git commit -m "Automatically update PDfs for individual glyphs"        
 
   build_sampler:
       runs-on: ubuntu-latest
