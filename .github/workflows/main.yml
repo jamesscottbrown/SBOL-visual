@@ -58,12 +58,18 @@ jobs:
           files: output/sbolvisual.pdf
           
       - if: ${{ github.event_name == 'push' }}
-        name: Commit and push glyph PDFs
+        name: Commit glyph PDFs, ready to push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add specification/glyphscript/Glyphs/
-          git diff-index --quiet HEAD || git commit -m "Automatically update PDfs for individual glyphs"        
+          git diff-index --quiet HEAD || git commit -m "Automatically update PDfs for individual glyphs"
+          
+      - name: Push changes
+        if: ${{ github.event_name == 'push' }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build_sampler:
       runs-on: ubuntu-latest
