@@ -1,4 +1,4 @@
-# Engineered Region
+# Engineered Region.
 
 ## Associated SO term(s)
 SO:0000804 (Engineered Region)
